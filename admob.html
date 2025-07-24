@@ -1,14 +1,11 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Tonton Iklan - BEX</title>
-  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
-  <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    body { font-family: Arial, sans-serif; background: #0d0f1a; color: white; text-align: center; padding-top: 50px; }
-    button { padding: 15px 25px; font-size: 18px; background: #1e88e5; color: white; border: none; border-radius: 10px; }
+    body { font-family: Arial, sans-serif; text-align: center; padding: 30px; }
+    button { padding: 15px 25px; font-size: 16px; margin-top: 20px; }
     #status { margin-top: 20px; font-size: 16px; }
   </style>
 </head>
@@ -18,25 +15,37 @@
   <p id="status">Menunggu interaksi pengguna...</p>
 
   <script>
+    // Ambil Telegram user_id
+    const user_id = Telegram.WebApp.initDataUnsafe?.user?.id;
+
     function showAd() {
-      document.getElementById('status').innerText = "⏳ Memuat iklan...";
-      // Simulasi iklan selesai ditonton (karena AdMob JS tidak bisa langsung di browser biasa)
+      document.getElementById('status').innerText = "🎬 Menonton iklan...";
+
+      // Simulasi delay iklan
       setTimeout(() => {
-        document.getElementById('status').innerText = "✅ Iklan selesai. Memberikan reward...";
-        fetch('https://your-api-url/reward_ad', {
+        document.getElementById('status').innerText = "⏳ Memberi reward...";
+
+        // Kirim ke backend kamu
+        fetch('http://192.168.1.100:8000/reward_ad', {  // ganti IP sesuai lokalmu
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ user_id: Telegram.WebApp.initDataUnsafe.user.id })
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ user_id: user_id })
         })
         .then(res => res.json())
         .then(data => {
           if (data.status === "success") {
-            document.getElementById('status').innerText = "🎉 0.1 BEX berhasil ditambahkan!";
+            document.getElementById('status').innerText = "✅ Reward diberikan: 0.1 BEX!";
           } else {
-            document.getElementById('status').innerText = "⚠️ Gagal klaim: " + data.message;
+            document.getElementById('status').innerText = "⚠️ Gagal: " + data.message;
           }
+        })
+        .catch(err => {
+          document.getElementById('status').innerText = "❌ Gagal terhubung ke server.";
         });
-      }, 4000); // Simulasi durasi iklan
+
+      }, 4000); // Simulasi 4 detik nonton iklan
     }
   </script>
 </body>
