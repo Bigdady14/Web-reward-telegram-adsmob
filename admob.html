@@ -1,0 +1,43 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tonton Iklan - BEX</title>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+  <script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; background: #0d0f1a; color: white; text-align: center; padding-top: 50px; }
+    button { padding: 15px 25px; font-size: 18px; background: #1e88e5; color: white; border: none; border-radius: 10px; }
+    #status { margin-top: 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h1>🎥 Tonton Iklan & Dapatkan 0.1 BEX</h1>
+  <button onclick="showAd()">Tonton Iklan</button>
+  <p id="status">Menunggu interaksi pengguna...</p>
+
+  <script>
+    function showAd() {
+      document.getElementById('status').innerText = "⏳ Memuat iklan...";
+      // Simulasi iklan selesai ditonton (karena AdMob JS tidak bisa langsung di browser biasa)
+      setTimeout(() => {
+        document.getElementById('status').innerText = "✅ Iklan selesai. Memberikan reward...";
+        fetch('https://your-api-url/reward_ad', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: Telegram.WebApp.initDataUnsafe.user.id })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === "success") {
+            document.getElementById('status').innerText = "🎉 0.1 BEX berhasil ditambahkan!";
+          } else {
+            document.getElementById('status').innerText = "⚠️ Gagal klaim: " + data.message;
+          }
+        });
+      }, 4000); // Simulasi durasi iklan
+    }
+  </script>
+</body>
+</html>
